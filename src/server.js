@@ -13,11 +13,30 @@ const app = express();
 // Security and essentials
 app.use(helmet());
 
+const allowedOrigins = [
+"https://wealth-manager-dashboard-client.vercel.app",
+/.vercel.app$/, // any vercel preview/alias
+"http://localhost:5173",
+];
+
 const corsOptions = {
-    // This URL must match your Vercel frontend deployment URL exactly
-    origin: 'https://wealth-manager-dashboard-client.vercel.app', 
-    optionsSuccessStatus: 200 // Some legacy browsers (IE11, various SmartTVs) choke on 204
+origin(origin, cb) {
+if (!origin) return cb(null, true); // SSR/health checks
+if (
+allowedOrigins.some((o) =>
+typeof o === "string" ? o === origin : o.test(origin)
+)
+) {
+return cb(null, true);
+}
+return cb(new Error(`CORS blocked for origin: ${origin}`));
+},
+credentials: false,
+methods: ["GET", "HEAD", "OPTIONS"],
+allowedHeaders: ["Content-Type", "Authorization"],
+optionsSuccessStatus: 200,
 };
+
 app.use(cors(corsOptions));
 
 app.use(express.json());
