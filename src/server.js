@@ -13,12 +13,17 @@ const app = express();
 // CORS first — allow all for demo
 app.use(
   cors({
-    origin: "https://wealth-manager-dashboard-client.vercel.app",
+    origin: [
+      "https://wealth-manager-dashboard-client.vercel.app", // production frontend
+      /\.vercel\.app$/ // allow all vercel preview URLs
+    ],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"]
-    
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true // if you ever use cookies
   })
 );
+app.options("*", cors());
+
 
 // Handle preflight requests for all routes
 app.options("*", cors());
