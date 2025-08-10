@@ -10,15 +10,8 @@ config();
 
 const app = express();
 
-// CORS first – allow all for demo
-app.use(
-cors({
-origin: "",
-methods: ["GET", "HEAD", "OPTIONS"],
-allowedHeaders: ["Content-Type", "Authorization"],
-optionsSuccessStatus: 200,
-})
-);
+// CORS first — allow all for demo
+app.use(cors({ origin: "", methods: ["GET", "HEAD", "OPTIONS"], allowedHeaders: ["Content-Type", "Authorization"] }));
 app.options("", cors());
 
 // Security and essentials
