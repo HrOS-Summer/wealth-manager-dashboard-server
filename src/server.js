@@ -12,7 +12,13 @@ const app = express();
 
 // Security and essentials
 app.use(helmet());
-app.use(cors());
+
+const corsOptions = {
+    origin: 'https://wealth-manager-dashboard-client-9vwcf6ohr-hros-summers-projects.vercel.app',
+    optionsSuccessStatus: 200 // Some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+app.use(cors(corsOptions));
+
 app.use(express.json());
 app.use(morgan(process.env.NODE_ENV === "production" ? "combined" : "dev"));
 
