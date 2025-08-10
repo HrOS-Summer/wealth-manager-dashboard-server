@@ -13,7 +13,7 @@ const app = express();
 // CORS first — allow all for demo
 app.use(
   cors({
-    origin: "*",
+    origin: "https://wealth-manager-dashboard-client.vercel.app",
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"]
     
