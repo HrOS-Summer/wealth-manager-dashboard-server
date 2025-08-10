@@ -12,14 +12,16 @@ const app = express();
 
 // CORS first — allow all for demo
 app.use(
-cors({
-origin: "",
-methods: ["GET", "HEAD", "OPTIONS"],
-allowedHeaders: ["Content-Type", "Authorization"],
-})
+  cors({
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"]
+    
+  })
 );
-// Handle preflight
-app.options("", cors());
+
+// Handle preflight requests for all routes
+app.options("*", cors());
 
 // Security and essentials
 app.use(helmet());
