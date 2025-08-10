@@ -3,8 +3,8 @@ import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
 import { config } from "dotenv";
-import portfolioRoutes from "./routes/portfolioRoutes.js";
-import { notFound, errorHandler } from "./middleware/errorHandler.js";
+import portfolioRoutes from "./src/routes/portfolioRoutes.js";
+import { notFound, errorHandler } from "./src/middleware/errorHandler.js";
 
 config();
 const app = express();
@@ -20,6 +20,10 @@ app.use(express.json());
 app.use(morgan(process.env.NODE_ENV === "production" ? "combined" : "dev"));
 
 // API routes
+app.get('/', (req, res) => {
+  res.send('Hello World')
+})
+
 app.use("/api/portfolio", portfolioRoutes);
 
 // 404 + error handler
