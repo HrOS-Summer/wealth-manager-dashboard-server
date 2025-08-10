@@ -7,28 +7,30 @@ import portfolioRoutes from "./routes/portfolioRoutes.js";
 import { notFound, errorHandler } from "./middleware/errorHandler.js";
 
 config();
-
 const app = express();
 
-// CORS first — allow all for demo
+const allowedOrigins = [
+  "http://localhost:5173", // local dev
+  "https://wealth-manager-dashboard-client.vercel.app" // prod frontend
+];
+
+// CORS middleware
 app.use(
   cors({
-    origin: [
-      "https://wealth-manager-dashboard-client.vercel.app", // production frontend
-      /\.vercel\.app$/ // allow all vercel preview URLs
-    ],
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin) || /\.vercel\.app$/.test(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true // if you ever use cookies
+    credentials: true
   })
 );
+
 app.options("*", cors());
-
-
-// Handle preflight requests for all routes
-app.options("*", cors());
-
-// Security and essentials
 app.use(helmet());
 app.use(express.json());
 app.use(morgan(process.env.NODE_ENV === "production" ? "combined" : "dev"));
@@ -36,9 +38,9 @@ app.use(morgan(process.env.NODE_ENV === "production" ? "combined" : "dev"));
 // API routes
 app.use("/api/portfolio", portfolioRoutes);
 
-// 404 and centralized error handler
+// 404 + error handler
 app.use(notFound);
 app.use(errorHandler);
 
-export default app;
-
+const PORT = process.env.PORT || 4000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
