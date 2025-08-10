@@ -11,7 +11,14 @@ config();
 const app = express();
 
 // CORS first — allow all for demo
-app.use(cors({ origin: "", methods: ["GET", "HEAD", "OPTIONS"], allowedHeaders: ["Content-Type", "Authorization"] }));
+app.use(
+cors({
+origin: "",
+methods: ["GET", "HEAD", "OPTIONS"],
+allowedHeaders: ["Content-Type", "Authorization"],
+})
+);
+// Handle preflight
 app.options("", cors());
 
 // Security and essentials
@@ -26,8 +33,5 @@ app.use("/api/portfolio", portfolioRoutes);
 app.use(notFound);
 app.use(errorHandler);
 
-// Start server
-const PORT = process.env.PORT || 4001;
-app.listen(PORT, () => {
-console.log(`Portfolio API running on port ${PORT}`);
-});
+export default app;
+
