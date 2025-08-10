@@ -14,7 +14,8 @@ const app = express();
 app.use(helmet());
 
 const corsOptions = {
-    origin: 'https://wealth-manager-dashboard-client-9vwcf6ohr-hros-summers-projects.vercel.app',
+    // This URL must match your Vercel frontend deployment URL exactly
+    origin: 'https://wealth-manager-dashboard-client.vercel.app', 
     optionsSuccessStatus: 200 // Some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 app.use(cors(corsOptions));
