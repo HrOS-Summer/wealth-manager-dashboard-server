@@ -1,61 +1,39 @@
-import express from "express";
-import cors from "cors";
+// If Express still fails, use this structure instead:
 
-const app = express();
+// Create: api/index.js (for root route)
+export default function handler(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-// Essential middleware only
-app.use(cors({
-  origin: true,
-  credentials: true
-}));
-app.use(express.json({ limit: '1mb' }));
+  if (req.method === 'OPTIONS') {
+    res.status(200).end();
+    return;
+  }
 
-// Simple routes
-app.get('/', (req, res) => {
   res.json({ 
     message: 'Wealth Manager API Server', 
     status: 'running',
-    timestamp: new Date().toISOString(),
-    node_version: process.version
-  });
-});
-
-app.get('/api/test', (req, res) => {
-  res.json({ 
-    message: 'API is working', 
-    timestamp: new Date().toISOString(),
-    method: req.method,
-    url: req.url
-  });
-});
-
-app.get('/api/portfolio/health', (req, res) => {
-  res.json({ 
-    status: 'ok',
-    service: 'portfolio',
     timestamp: new Date().toISOString()
   });
-});
+}
 
-// Catch all 404
-app.use('*', (req, res) => {
-  res.status(404).json({ 
-    error: 'Not Found', 
-    path: req.originalUrl,
-    method: req.method
-  });
-});
-
-// Error handler
-app.use((err, req, res, next) => {
-  console.error('Express Error:', err);
-  res.status(500).json({ 
-    error: 'Internal Server Error', 
-    details: process.env.NODE_ENV === 'development' ? err.message : 'Something went wrong'
-  });
-});
-
-// Vercel serverless function export
+// Create: api/test.js
 export default function handler(req, res) {
-  return app(req, res);
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  
+  res.json({ 
+    message: 'API is working', 
+    timestamp: new Date().toISOString()
+  });
+}
+
+// Create: api/portfolio/health.js
+export default function handler(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  
+  res.json({ 
+    status: 'ok',
+    service: 'portfolio'
+  });
 }
